@@ -1,6 +1,7 @@
 # data and image files
 data/
 results/
+*.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
