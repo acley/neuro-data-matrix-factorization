@@ -2,6 +2,7 @@ from scipy import *
 from pylab import *
 import neurosynth
 from neurosynth.base.dataset import Dataset
+from neurosynth.analysis import meta
 
 def create_dataset(database_location, feature_location):
 	dataset = Dataset(database_location)
@@ -66,21 +67,23 @@ def voxel_idx_to_coordinates(voxel_idcs, masker):
 	
 def create_voxel_x_feature_matrix(dataset):
 	feature_list = dataset.get_feature_names()
-	masker = dataset.volume
-	vox_feat_matrix = zeros((len(masker.in_mask[0]), len(feature_list)))
+	masker = dataset.masker
+	#print masker.n_vox_in_mask, " " , len(feature_list), " ", masker.n_vox_in_mask*len(feature_list)
+	vox_feat_matrix = zeros((masker.n_vox_in_mask, len(feature_list)))
 	for (i,feature) in enumerate(feature_list):
 		image_path = 'results/' + feature + '_pFgA_z.nii.gz'
 		vox_feat_matrix[:,i] = masker.mask(image_path)
 	return vox_feat_matrix
 	
 # prepare dataset. this only needs to be done once and takes a couple of minutes
-#path_to_database_txt = 'data/databse.txt'
-#path_to_features.txt = 'data/features.txt'
-#dataset = create_dataset('data/databse.txt', 'data/features.txt')
+#path_to_database_txt = 'data/database.txt'
+#path_to_features_txt = 'data/features.txt'
+#dataset = create_dataset(path_to_database_txt, path_to_features_txt)
+#dataset = Dataset.load('dataset.pkl')
 #do_full_analysis(dataset)
 
 dataset = Dataset.load('dataset.pkl')
-masker = dataset.volume
+masker = dataset.masker
 features = dataset.get_feature_names()
 voxel_feature_matrix = create_voxel_x_feature_matrix(dataset)
 
