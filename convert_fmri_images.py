@@ -32,6 +32,3 @@ def concat_fmri_scans():
 	folder = 'SQR_001/'
 	images = sorted(glob.glob(data_dir + folder + '*.nii'))
 	#c_img = nib.funcs.concat_images(images)
-
-def reduce_fmri_images():
-	dataset = 
