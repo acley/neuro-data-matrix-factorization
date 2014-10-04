@@ -159,7 +159,7 @@ with h5py.File('neurodata.hdf5', 'r') as f1, h5py.File('test.hdf5') as f2:
 
 	reg = 0.06
 	mu = 0.005
-	k = 50
+	k = 10
 	conv_delta = 100
 	train_MRMF_vanilla(f1, f2, entity_types, relation_types, k, mu, reg, conv_delta,f3,f4)
 	
