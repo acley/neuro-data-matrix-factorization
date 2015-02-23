@@ -1,4 +1,4 @@
-function fixed_viewing_condition_cca(ratio)
+function fixed_viewing_condition_cca(ratio, subject_data)
 
 set_paths;
 
@@ -14,21 +14,24 @@ assert(ratio > 0 && ratio <= 1);
 
 fprintf('\nStarting Experiment with %d percent of the available training data.\n\n', ratio*100)
 
-ncomp = 4;
+ncomp = 10;
 maxmovs = 3;
 TR = 3;
 
 subjs = dir(fullfile(subject_data_dir,'SQR_*'));
-num_subjects = 2;%length(subjs);
+num_subjects = length(subjs);
 
-fprintf('Loading subject data...\n');
-linearkernel = 1;
-for isubj = 1:num_subjects
-	fprintf('Loading Subject %d\n',isubj)
-	subject_data{isubj} = load(fullfile(subject_data_dir,subjs(isubj).name), 'conditions', 'K_lin', 'dat');
-	subject_data{isubj}.K = subject_data{isubj}.K_lin;
+% if exist('subject_data')==0
+if nargin < 2
+	fprintf('Loading subject data...\n');
+	linearkernel = 1;
+	for isubj = 1:num_subjects
+		fprintf('Loading Subject %d\n',isubj)
+		subject_data{isubj} = load(fullfile(subject_data_dir,subjs(isubj).name), 'conditions', 'K_lin', 'dat');
+		subject_data{isubj}.K = subject_data{isubj}.K_lin;
+	end
+	fprintf('\n');
 end
-fprintf('\n');
 
 % loop through all experimental conditions
 for icolcond = 1:2
@@ -94,6 +97,10 @@ end
 
 end
 
+function reverse_negative_weights(c, directions)
+	
+end
+
 function [activation_patterns, canonical_components, directions] = ...
 				apply_cca(trainidcs, testidcs, subject_data, ncomp)
 	
@@ -103,7 +110,10 @@ function [activation_patterns, canonical_components, directions] = ...
 	
 	% find canonical components
 	[c,directions,~] = cca(Xtrain,ncomp);
-	assert(sum(c<0) == 0); % make sure no directions have to be inverted
+	if (sum(c<0) ~= 0)
+		c
+	end
+	% assert(sum(c<0) == 0); % make sure no directions have to be inverted
     
 	% compute canonical activation patterns on test data
 	for isubj=1:length(trainidcs)

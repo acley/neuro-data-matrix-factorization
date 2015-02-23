@@ -73,7 +73,7 @@ function plot_groups(condition_groups, masks, map, output_dir)
 				% add subplot (1 row per fold, 3 columns for 3 factors)
 			end
 			
-			experiment_name = [condition_name, ': Subject', num2str(isubj)];
+			experiment_name = [condition_name, ' Subject', num2str(isubj)];
 			print('-dpng', '-r600', fullfile(output_dir, [experiment_name, '.png']));
 		end
 	end
