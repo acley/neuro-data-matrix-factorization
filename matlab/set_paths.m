@@ -7,6 +7,10 @@ if ispc == 1
 	base_dir = 'D:\home\achim\Masterprojekt\working';
 	subject_data_dir = 'D:\home\achim\Masterprojekt\working\input_subject_data';
 	nsynth_pattern_dir = 'D:\home\achim\Masterprojekt\working\input_nsynth_pattern';
+	functional_dir = 'D:\home\achim\Masterprojekt\ORIGINAL\functional';
+	structural_dir = 'D:\home\achim\Masterprojekt\ORIGINAL\structural';
+	logfile_dir = 'D:\home\achim\Masterprojekt\ORIGINAL\logfiles';
+	nsynth_reference_file_path = 'D:\home\achim\Masterprojekt\ORIGINAL\functional\ability_pAgF_z.nii';
 else
 	subject_data_dir = '/home/achim/Data/sequrea/working/masterprojekt/input_subject_data';
 	base_dir = '/home/achim/Data/sequrea/working/projekt';
