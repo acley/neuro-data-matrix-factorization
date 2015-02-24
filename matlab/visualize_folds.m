@@ -111,29 +111,6 @@ function apply_plot(data, map, column_titles, row_titles, save_path)
 %	print(gcf, 'Example2.png', '-dpng', '-r1000', '-opengl');
 end
 
-function add_row_to_subplot(container, map, row_idx)
-	for ifact = 1:3
-		if ifact == 1
-			subplot(3,3,(row_idx-1)*3 + ifact);
-		else
-			subaxis(3,3,(row_idx-1)*3 + ifact, 'Spacing', 0.03, 'Padding', 0, 'Margin', 0);
-		end
-		hold on
-		subp_title = ['Factor ', num2str(ifact)];
-		title(subp_title);
-%		colormap(map);
-%		colorbar()
-		imagesc(container{ifact}');
-%		axis image
-		axis off
-%		set(gca,'Position',[0 0 1 1]) 
-%		set(gca, 'XTick', []);
-%		set(gca, 'YTick', []);
-		
-		hold off
-	end	
-end
-
 function viewing_condition_groups = group_conditions(conditions)
 	viewing_condition_groups.data = {{},{},{},{}};
 	viewing_condition_groups.names = {'color_2D', 'color_3D', 'b&w_2D', 'b&w_3D'};

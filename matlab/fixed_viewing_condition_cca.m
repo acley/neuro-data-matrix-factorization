@@ -19,13 +19,12 @@ maxmovs = 3;
 TR = 3;
 
 subjs = dir(fullfile(subject_data_dir,'SQR_*'));
-num_subjects = length(subjs);
+num_subjects = 2%length(subjs);
 
-% if exist('subject_data')==0
 if nargin < 2
 	fprintf('Loading subject data...\n');
 	linearkernel = 1;
-	for isubj = 1:num_subjects
+	for isubj = 1:2%num_subjects
 		fprintf('Loading Subject %d\n',isubj)
 		subject_data{isubj} = load(fullfile(subject_data_dir,subjs(isubj).name), 'conditions', 'K_lin', 'dat');
 		subject_data{isubj}.K = subject_data{isubj}.K_lin;
@@ -65,7 +64,7 @@ for icolcond = 1:2
 					
 					% reduce the amount of training data to test the robustness of the cca results
 					if (ratio ~= 1)
-						trainidx{isubj} = reduce_training_data(0.99, trainidx{isubj});
+						trainidx{isubj} = reduce_training_data(ratio, trainidx{isubj});
 					end
 				end
 			end
@@ -76,17 +75,14 @@ for icolcond = 1:2
 					apply_cca(trainidx, testidx, subject_data, ncomp);
 
 %				% compute CISC on hold out data
-%				[cisc_cv(icolcond,idepthcond,movcond,:,:),cisc_ids(icolcond,idepthcond,movcond,:,:)] ...
-%					= sequ_cisc(canonical_components,1:10);
 				[cisc, cisc_ids] = sequ_cisc(canonical_components,1:10);
 				
 				% save activation patterns
 				color_cond = {'color', 'b&w'};
 				depth_cond = {'2D', '3D'};
 				movie_cond = {'Cherryblossom','Deepsea','Rallyekorea'};
+%				viewing_conditions = []
 				filename = [movie_cond{movcond}, '_', color_cond{icolcond}, '_', depth_cond{idepthcond}];
-%				save(fullfile(cca_output_dir, [filename, '.mat']),...
-%					'canonical_activation_patterns', 'canonical_components', 'directions', 'cisc', 'cisc_ids');
 				save(fullfile(save_path, [filename, '.mat']),...
 					'canonical_activation_patterns', 'canonical_components', 'directions', 'cisc', 'cisc_ids');
 			end

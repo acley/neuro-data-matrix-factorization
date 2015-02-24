@@ -2,27 +2,42 @@ function average_cca_output_per_subject()
 	set_paths;
 
 	percentages = dir(fullfile(cca_output_dir, '*percent'));
-	for ipcnt = 1:1%length(percentages)
+	for ipcnt = 1:length(percentages)
 		fprintf('Processing the runs using %s of the availible training data.\n',...
 				percentages(ipcnt).name);
 		pcnt_dir = fullfile(cca_output_dir, percentages(ipcnt).name);
 		viewing_conditions_split = load_activation_patterns(pcnt_dir);
 		viewing_conditions_grouped = group_conditions(viewing_conditions_split);
-		average_over_groups(viewing_conditions_grouped);
+		average_activation_patterns = average_over_groups(viewing_conditions_grouped);
+		
+		output_dir = fullfile(cca_output_averaged_dir, percentages(ipcnt).name);
+		if exist(output_dir) ~= 7
+			mkdir(output_dir);
+		end
+		save_average_patterns(average_activation_patterns, viewing_conditions_grouped.names, output_dir);
 	end
 end
 
-function average_over_groups(condition_groups)
+function save_average_patterns(average_patterns, group_names, output_dir)
+	for igroup = 1:length(average_patterns)
+		viewing_condition = group_names{igroup};
+		average_activation_patterns = average_patterns{igroup};
+		filename = [viewing_condition, '.mat'];
+		save(fullfile(output_dir, filename), 'average_activation_patterns', 'viewing_condition');
+	end
+end
+
+function average_patterns = average_over_groups(condition_groups)
 	for igroup = 1:length(condition_groups.names)
 		condition_name = condition_groups.names{igroup};
 		condition_folds = condition_groups.data{igroup};
 		
-		average_patterns = condition_folds{1};
-		for isubj = 1:length(average_patterns)
+		average_patterns{igroup} = condition_folds{1};
+		for isubj = 1:length(average_patterns{igroup})
 			for ifold = 2:length(condition_folds)
 				fold = condition_folds{ifold};
-				average_patterns{isubj} = ...
-					((ifold-1)/ifold) * average_patterns{isubj} + (1/ifold) * fold{isubj};
+				average_patterns{igroup}{isubj} = ...
+					((ifold-1)/ifold) * average_patterns{igroup}{isubj} + (1/ifold) * fold{isubj};
 			end
 		end
 	end
