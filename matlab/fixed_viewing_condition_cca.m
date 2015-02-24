@@ -19,7 +19,7 @@ maxmovs = 3;
 TR = 3;
 
 subjs = dir(fullfile(subject_data_dir,'SQR_*'));
-num_subjects = 2%length(subjs);
+num_subjects = length(subjs);
 
 if nargin < 2
 	fprintf('Loading subject data...\n');
@@ -51,6 +51,7 @@ for icolcond = 1:2
 					ceil(find(X.conditions(:,1) == movcond & ...
 							X.conditions(:,2)==icolcond-1 & ...
 							X.conditions(:,3)==idepthcond-1,1,'first')*TR/(120+20));
+				assert(~isempty(idx))
 				if ~isempty(idx)
 					% sort idcs by moiv
 					[~,sortidx] = sort(X.conditions(idx,1));
@@ -66,31 +67,54 @@ for icolcond = 1:2
 					if (ratio ~= 1)
 						trainidx{isubj} = reduce_training_data(ratio, trainidx{isubj});
 					end
+					
+					idx_lengths{isubj} = [length(trainidx{isubj}), length(testidx{isubj})];
+					fprintf('%d %d\n', length(trainidx{isubj}), length(testidx{isubj}))
+					% [rand_trainidx{isubj}, rand_testidx{isubj}] = ...
+						% create_random_data(length(trainidx{isubj}), length(testidx{isubj}), X)
 				end
 			end
-			if ~isempty(idx)
+			
+			assert(isequal(idx_lengths{:}) == 1);
+			
+			% if ~isempty(idx)
 
-
-				[canonical_activation_patterns, canonical_components, directions] = ...
-					apply_cca(trainidx, testidx, subject_data, ncomp);
-
-%				% compute CISC on hold out data
-				[cisc, cisc_ids] = sequ_cisc(canonical_components,1:10);
+				% [canonical_activation_patterns, canonical_components, directions] = ...
+					% apply_cca(trainidx, testidx, subject_data, ncomp);
+					
+				% [random_patterns, random_components, random_directions] = ...
+					% apply_cca(rand_trainidx, rand_testidx, ncomp);
+					
+				% compute CISC on hold out data
+				% [cisc, cisc_ids] = sequ_cisc(canonical_components,1:10);
 				
-				% save activation patterns
-				color_cond = {'color', 'b&w'};
-				depth_cond = {'2D', '3D'};
-				movie_cond = {'Cherryblossom','Deepsea','Rallyekorea'};
-%				viewing_conditions = []
-				filename = [movie_cond{movcond}, '_', color_cond{icolcond}, '_', depth_cond{idepthcond}];
-				save(fullfile(save_path, [filename, '.mat']),...
-					'canonical_activation_patterns', 'canonical_components', 'directions', 'cisc', 'cisc_ids');
-			end
+				% % save activation patterns
+				% color_cond = {'color', 'b&w'};
+				% depth_cond = {'2D', '3D'};
+				% movie_cond = {'Cherryblossom','Deepsea','Rallyekorea'};
+				% % viewing_conditions = []
+				% filename = [movie_cond{movcond}, '_', color_cond{icolcond}, '_', depth_cond{idepthcond}];
+				% save(fullfile(save_path, [filename, '.mat']),...
+					% 'canonical_activation_patterns', 'canonical_components', 'directions', 'cisc', 'cisc_ids');
+			% end
 		end
         
 	end
 end
 
+end
+
+function check_data_sizes(trainidcs, testidcs)
+	
+end
+
+function [train_idx, test_idx] = create_random_data(train_size, test_size, subj_data)
+	idx = find(...
+		subj_data.conditions(:,1) > 0 & ...
+		subj_data.conditions(:,1) <= 3);
+	rand_idx = randperm(length(idx));
+	train_idx = idx(rand_idx(1:train_size));
+	test_idx = idx(rand_idx(train_size+1:train_size+1+test_size));
 end
 
 function reverse_negative_weights(c, directions)

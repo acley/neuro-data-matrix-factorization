@@ -11,6 +11,7 @@ if ispc == 1
 	structural_dir = 'D:\home\achim\Masterprojekt\ORIGINAL\structural';
 	logfile_dir = 'D:\home\achim\Masterprojekt\ORIGINAL\logfiles';
 	nsynth_reference_file_path = 'D:\home\achim\Masterprojekt\ORIGINAL\functional\ability_pAgF_z.nii';
+	preprocessed_data_dir = 'D:\home\achim\Masterprojekt\working\preprocessed_data';
 else
 	subject_data_dir = '/home/achim/Data/sequrea/working/masterprojekt/input_subject_data';
 	base_dir = '/home/achim/Data/sequrea/working/projekt';
@@ -30,6 +31,11 @@ end
 cca_output_averaged_dir = fullfile(cca_output_base_dir, [experiment_name, '_averaged']);
 if exist(cca_output_averaged_dir) ~= 7
 	mkdir(cca_output_averaged_dir);
+end
+
+cca_output_random_dir = fullfile(cca_output_base_dir, [experiment_name, '_random']);
+if exist(cca_output_random_dir) ~= 7
+	mkdir(cca_output_random_dir);
 end
 
 random_data_path = fullfile(cca_output_base_dir, 'random_weights.mat');
