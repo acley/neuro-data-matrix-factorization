@@ -65,8 +65,10 @@ function output = fixed_viewing_condition_3FCV_CCA(config, data_ratio, subject_d
 					can_cmpts{icolcond, idepthcond, movcond},...
 					dirs{icolcond, idepthcond, movcond}] = apply_cca(trainidx, testidx, subject_data, ncomp);
 				
+				% [cisc(icolcond,idepthcond,movcond,:,:), cisc_ids(icolcond,idepthcond,movcond,:,:)] = ...
+					% sequ_cisc(can_cmpts{icolcond, idepthcond, movcond}, 1:ncom_cisc);
 				[cisc(icolcond,idepthcond,movcond,:,:), cisc_ids(icolcond,idepthcond,movcond,:,:)] = ...
-					sequ_cisc(can_cmpts{icolcond, idepthcond, movcond}, 1:ncom_cisc);
+					sequ_cisc(can_cmpts{icolcond, idepthcond, movcond});
 			end   
 		end
 	end

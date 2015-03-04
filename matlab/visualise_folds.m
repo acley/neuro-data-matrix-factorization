@@ -30,7 +30,7 @@ function prepare_plots(can_act_pts, av_act_pts, masks, output_dir)
 				for ifold = 1:size(can_act_pts,3)
 					pattern = can_act_pts{icolcond,idepthcond,ifold}{isubj};
 					% 3 columns. one for each of the top 3 factors
-					for ifact = 1:3
+					for ifact = 1:5
 						vol = ones(size(mask)) * min(pattern(:,ifact));
 						vol(mask) = pattern(:,ifact);
 						
@@ -38,17 +38,15 @@ function prepare_plots(can_act_pts, av_act_pts, masks, output_dir)
 					end
 				end
 				% 1 row for the average pattern
-				for ifact = 1:3
+				for ifact = 1:5
 					pattern = av_act_pts{icolcond,idepthcond}{isubj};
 					vol = ones(size(mask)) * min(pattern(:,ifact));
 					vol(mask) = pattern(:,ifact);
 					
 					image_container{size(can_act_pts,3)+1,ifact} = generate_flat_image(vol);
 				end
-				col_titles = {'Factor 1', 'Factor 2', 'Factor 3'};
-				row_titles = {'Act. Pat. Fold 1', 'Act. Pat. Fold 2', 'Act. Pat. Fold 3', 'Average Act. Pat.'};
 				save_path = fullfile(output_dir, [viewing_condition(icolcond,idepthcond), ' - Subject ', num2str(isubj)]);
-				print_plots(image_container, col_titles, row_titles, save_path);
+				print_plots(image_container, save_path);
 			end
 		end
 	end
@@ -85,7 +83,7 @@ function flat_image = generate_flat_image(vol)
 	end
 end
 
-function print_plots(data, column_titles, row_titles, save_path)
+function print_plots(data, save_path)
 	clf;
 	[num_rows, num_cols] = size(data);
 	handles = tightPlots(num_rows, num_cols, 15, [1 1], [0.4 0.4], [0.6 0.7], [0.8 0.3], 'centimeters');
@@ -103,20 +101,26 @@ function print_plots(data, column_titles, row_titles, save_path)
 	set(handles(1:end), 'XTick', []);
 	set(handles(1:end), 'YTick', []);
 	
-	for ititle = 1:length(column_titles)
-		axes(handles(ititle)); title(column_titles{ititle});
+	for icol = 1:num_cols
+		col_title = ['Factor ', num2str(icol)];
+		axes(handles(icol)); title(col_title);
 		set(gcf, 'Visible', 'off')
 	end
 	
-	for ititle = 1:length(row_titles)
-		ax_idx = (ititle-1) * num_cols + 1;
-		ylabel(handles(ax_idx), row_titles{ititle});
+	for irow = 1:num_rows
+		if irow == num_rows
+			col_label = ['Act. Pat. Fold ', num2str(irow)];
+		else
+			col_label = ['Average Act. Pat.'];
+		end
+		ax_idx = (irow-1) * num_cols + 1;
+		ylabel(handles(ax_idx), col_label);
 		set(gcf, 'Visible', 'off');
 	end
 	
-	print(gcf, [save_path, '.eps'], '-depsc2', '-painters', '-loose');
-%	print(gcf, [save_path, '.pdf'], '-dpdf', '-painters', '-loose');
-%	print(gcf, [save_path, '.png'], '-dpng', '-r1000', '-opengl');
+	% print(gcf, [save_path, '.eps'], '-depsc2', '-painters', '-loose');
+	% print(gcf, [save_path, '.pdf'], '-dpdf', '-painters', '-loose');
+	print(gcf, [save_path, '.png'], '-dpng', '-r500', '-opengl');
 end
 
 function masks = load_masks(subject_data_dir)

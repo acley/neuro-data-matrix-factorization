@@ -19,7 +19,8 @@ function visualise_ciscs(config)
 					axes(handles(ax_counter));
 					set(gcf, 'Visible', 'off');
 					errorbar(mean(fold_cisc), std(fold_cisc), 'rx');
-					xlim([0,11]);
+					num_factors = min(config.nfactors,10);
+					xlim([0,num_factors+1]);
 					ylim([0,1]);
 					if ifold ~= 1
 						set(gca, 'YTick', []);
@@ -34,23 +35,27 @@ function visualise_ciscs(config)
 		
 		col_titles = {'Fold 1', 'Fold 2', 'Fold 3'};
 		for ititle = 1:num_cols
-			axes(handles(ititle)); title(col_titles{ititle});
+			title_str = ['Fold ', num2str(ititle)];
+			axes(handles(ititle));
+			title(title_str);
 			set(gcf, 'Visible', 'off')
 		end
 		
 		set(handles(1:end), 'fontname', 'Times', 'fontsize', 10);
 		set(handles(1:end), 'XTick', []);
-		set(handles(end-2:end), 'XTick', 1:10);
-		for iaxis = 0:2
+		for iaxis = 0:num_cols-1
 			xlabel(handles(end-iaxis), 'Factors');
+			num_factors = min(config.nfactors,10);
+			set(handles(end-iaxis), 'XTick', 1:num_factors);
 		end
 		
 		output_dir = fullfile(base_dir, experiments(iexp).name, 'cisc_visualisations');
 		if exist(output_dir) ~= 7
 			mkdir(output_dir)
 		end
-		print(gcf, fullfile(output_dir, 'cisc_vis.eps'), '-depsc2', '-painters', '-loose');
-%	print(gcf, [save_path, '.png'], '-dpng', '-r1000', '-opengl');
+		% print(gcf, fullfile(output_dir, 'cisc_vis.eps'), '-depsc2', '-painters', '-loose');
+		% print(gcf, fullfile(output_dir, 'cisc_vis.pdf'), '-dpdf', '-painters', '-loose');
+		print(gcf, fullfile(output_dir, 'cisc_vis.png'), '-dpng', '-r1000', '-opengl');
 	end
 end
 

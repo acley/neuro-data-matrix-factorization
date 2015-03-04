@@ -52,17 +52,20 @@ function prepare_plots(can_act_pts, av_act_pts, output_dir)
 					set(gcf, 'Visible', 'off');
 				end
 				% set row titles
-				row_titles = {'Act. Pat. Fold 1', 'Act. Pat. Fold 2', 'Act. Pat. Fold 3', 'Average Act. Pat.'};
 				for irow = 1:num_rows
+					if irow == num_rows
+						row_title = 'Average Act. Pat.';
+					else
+						row_title = ['Act. Pat. Fold ', num2str(irow)];
+					end
 					ax_idx = (irow-1) * num_cols + 1;
-					ylabel(handles(ax_idx), row_titles{irow});
+					ylabel(handles(ax_idx), row_title);
 					set(gcf, 'Visible', 'off');
 				end
 				
 				save_path = fullfile(output_dir, [viewing_condition(icolcond,idepthcond), ' - Subject ', num2str(isubj)]);
-				print(gcf, [save_path, '.eps'], '-depsc2', '-painters', '-loose');
-%	print(gcf, [save_path, '.png'], '-dpng', '-r1000', '-opengl');
-%				pause;
+				% print(gcf, [save_path, '.eps'], '-depsc2', '-painters', '-loose');
+				print(gcf, [save_path, '.png'], '-dpng', '-r1000', '-opengl');
 			end
 		end
 	end
