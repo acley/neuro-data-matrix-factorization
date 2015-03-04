@@ -1,5 +1,6 @@
-function plot_canonical_pattern_histograms()
-	set_paths;
+function plot_canonical_pattern_histograms(config)
+	subject_data_dir = config.subject_data_dir;
+	base_dir = config.base_dir;
 	
 	experiments = dir(fullfile(base_dir, '*percent*'));
 	for iexp = 1:length(experiments)

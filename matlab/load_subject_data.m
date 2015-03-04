@@ -1,16 +1,21 @@
-function subject_data = load_subject_data()
-	set_paths;
+function subject_data = load_subject_data(subject_data_dir, linearkernel)
+	if nargin < 2
+		linearkernel == 1;
+	end
 
 	fprintf('Loading subject data...\n');
 	
 	subjs = dir(fullfile(subject_data_dir,'SQR_*'));
 	num_subjects = length(subjs);
 	
-	linearkernel = 1;
 	for isubj = 1:3%num_subjects
 		fprintf('Loading Subject %d\n',isubj)
-		subject_data{isubj} = load(fullfile(subject_data_dir,subjs(isubj).name), 'conditions', 'K_lin', 'dat');
-		subject_data{isubj}.K = subject_data{isubj}.K_lin;
+		subject_data{isubj} = load(fullfile(subject_data_dir,subjs(isubj).name), 'conditions', 'K_lin', 'K_gauss', 'dat');
+		if linearkernel == 1
+			subject_data{isubj}.K = subject_data{isubj}.K_lin;
+		else
+			subject_data{isubj}.K = subject_data{isubj}.K_gauss;
+		end
 	end
 	fprintf('\n');
 end

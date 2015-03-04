@@ -1,6 +1,7 @@
-function visualize_folds()
-	set_paths;
-	
+function visualise_folds(config)
+	subject_data_dir = config.subject_data_dir;
+	base_dir = config.base_dir;
+		
 	masks = load_masks(subject_data_dir);
 	
 	experiments = dir(fullfile(base_dir, '*percent*'));

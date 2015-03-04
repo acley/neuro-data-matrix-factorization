@@ -1,5 +1,6 @@
-function visualise_ciscs()
-	set_paths;
+function visualise_ciscs(config)
+	base_dir = config.base_dir;
+	subject_data_dir = config.subject_data_dir;
 	
 	experiments = dir(fullfile(base_dir, '*percent*'));
 	for iexp = 1:length(experiments)
