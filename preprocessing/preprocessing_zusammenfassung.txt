@@ -1,0 +1,45 @@
+Schritt 0.1:
+
+ - mit dcm2nii(gui): 
+ 	-> File
+ 	-> "Modify Nifti"
+ 	-> "2013*t1*.nii" auswaehlen
+ 	-> Task: "Reorient to orthogonal"
+ 	=> output: "o2013*.nii"
+ - mit dcm2nii(gui)
+ 	-> wie vorher
+ 	-> Task: "Reorient and crop"
+ 	=> output: "co2013*.nii
+ 	
+Schritt 1:
+
+ - realign() function im preprocessing script ausfuehren.
+ 	-> pfade fuer functional niftis anpassen
+ 	=> output: realigned niftis & "mean*.nii"
+
+Schritt 2:
+
+ - coreg_highres_meanepi() function im preprocessing script ausfuehren.
+ 	-> meanepi parameter anpassen: "mean*.nii" aus Schritt 1
+ 	-> highres parameter anpassen: "co2013*.nii" aus Schritt 0.1
+ 	=> output: geaenderte version von "co2013*.nii"
+ 	
+Schritt 3:
+ - VBM8_job in spm ausfuehren
+ 	-> data-path parameter anpassen: "co2013*.nii" aus Schritt 2
+ 	-> tpm-pfad anpassen: "spm8/.../TPM.nii"
+ 	-> darteltpm-pfad anpassen: ".../vbm8/Template_1_IXI550*.nii"
+ 	=> outputs:
+ 		- "p*.nii", "rp*.nii", "m0*.nii", "wrp*.nii", "wmr*.nii"
+ 		- "y_rco*.nii"
+ 		
+Schritt 4:
+ - in der vbm8 toolbox
+ 	-> (extended tools) "apply deformation (many images)"
+ 	-> deformation field parameter: "y_rco*.nii" von Schritt 3
+ 	-> images parameter: realigned niftis von Schritt 1
+ 	=> output: "deformierte" niftis ("wrr*.nii")
+ 	
+Schritt 5:
+ - mit spm_reslice die niftis von Schritt 4 an voxel space von neurosynth images anpassen
+ 	=> output: nsynth_aligned niftis
