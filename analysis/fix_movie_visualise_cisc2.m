@@ -3,7 +3,7 @@ function fix_movie_visualise_cisc2(config, ciscs)
 	clf;
 	
 	% prepare handles for the subplots
-	num_rows = 4; % 1 per movie, 1 for the average
+	num_rows = 3;%4; % 1 per movie, 1 for the average
 	num_cols = size(ciscs,1);
 	handles = tightPlots(num_rows, num_cols, 15, [1 1], [0.4 0.8], [1.5 0.7], [1.5 0.3], 'centimeters');
 	
@@ -34,7 +34,8 @@ function fix_movie_visualise_cisc2(config, ciscs)
 	set(handles(1:end), 'Xtick', [], 'Ytick', [])
 	
 	% add legend and ytick to first colum
-	for irow = 1:num_rows-1
+%	for irow = 1:num_rows-1
+	for irow = 1:num_rows
 		ax_idx = (irow-1) * num_cols + 1;
 		movies = {'Cherryblossom','Deepsea','Rallyekorea'};
 		ylabel(handles(ax_idx), movies{irow});
@@ -49,6 +50,14 @@ function fix_movie_visualise_cisc2(config, ciscs)
 		axes(handles(icol));
 		title(title_str);
 		set(gcf, 'Visible', 'Off');
+	end
+	
+	% Xticks on bottom row
+	for icol = 1:num_cols
+		axes_id = (num_rows-1)*num_cols + icol;
+		xlabel(handles(axes_id), 'Factors');
+		num_factors = min(config.nfactors,10);
+		set(handles(axes_id), 'Xtick', 1:num_factors);
 	end
 	
 	% save

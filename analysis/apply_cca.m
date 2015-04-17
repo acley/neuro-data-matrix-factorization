@@ -8,9 +8,13 @@ function [activation_patterns, canonical_components, directions, score] = ...
 	% find canonical components
 	[score,directions,~] = cca(Xtrain,ncomp);
 	if (sum(score<0) ~= 0)
-		score
+		idx = find(score<0);
+		for i = 1:length(idx)
+			directions{idx(i)} = directions{idx(i)}*-1;
+		end
+		score = abs(score)
 	end
-	assert(sum(score<0) == 0); % make sure no directions have to be inverted
+%	assert(sum(score<0) == 0); % make sure no directions have to be inverted
    
 	% compute canonical activation patterns on test data
 	for isubj=1:length(trainidcs)

@@ -25,7 +25,7 @@ function output = fix_movie_CV_sanity_check(config, subject_data)
 		assert(isequal(ndata{:}) == 1);
 	
 		for iratio = 1:length(data_reductions)
-			fprintf('\tStarrting the CV with %d%% of the training data\n', iratio*100);
+			fprintf('\tStarrting the CV with %d%% of the training data\n', data_reductions(iratio)*100);
 			for ifold = 1:config.nfolds
 				fprintf('\tProcessing fold %d of %d.\n', ifold, config.nfolds);
 				for isubj = 1:length(subject_data)
@@ -41,7 +41,7 @@ function output = fix_movie_CV_sanity_check(config, subject_data)
 				end
 		
 				% apply CCA
-				[can_act_pts, can_cmpts, dirs, scores{iratio,imovie,ifold}] = ...
+				[can_act_pts, can_cmpts, dirs, scores(iratio,imovie,ifold,:)] = ...
 					apply_cca(trainidx, testidx, subject_data, config.nfactors);
 				
 				[cisc(iratio,imovie, ifold, :, :), cisc_ids(iratio,imovie, ifold, :, :)] = ...
