@@ -41,13 +41,13 @@ function output = fix_movie_CV_sanity_check(config, subject_data)
 					sequ_cisc(can_cmpts);
 			
 			% pattern visualisation		
-			output_dir = fullfile(config.base_dir, 'pattern_visualisations');
-			if exist(output_dir) ~= 7
-				mkdir(output_dir)
-			end
-			exp_name = ['Movie',num2str(imovie),'-Fold',num2str(ifold),'-'];
-			num_factors = 2;
-			fix_movie_visualise_fold_patterns(subject_data, can_act_pts, output_dir, exp_name,num_factors);
+%			output_dir = fullfile(config.base_dir, 'pattern_visualisations');
+%			if exist(output_dir) ~= 7
+%				mkdir(output_dir)
+%			end
+%			exp_name = ['Movie',num2str(imovie),'-Fold',num2str(ifold),'-'];
+%			num_factors = 2;
+%			fix_movie_visualise_fold_patterns(subject_data, can_act_pts, output_dir, exp_name,num_factors);
 		end
 	end
 	

@@ -51,5 +51,6 @@ function fix_movie_visualise_cisc_per_fold(config, cisc)
 	end
 	
 	% save
-	print(gcf, fullfile(config.base_dir, 'cisc_per_fold.eps'), '-depsc2', '-painters', '-loose');
+#	print(gcf, fullfile(config.base_dir, 'cisc_per_fold.eps'), '-depsc2', '-painters', '-loose');
+	print(gcf, fullfile(config.base_dir, 'cisc_per_fold.png'), '-dpng', '-r500', '-opengl');
 end
