@@ -13,7 +13,7 @@ if nargin<3,
     shrink = 'auto';
 end
 
-for ivar=1:length(X),
+for ivar=1:length(X)
     [dims(ivar),N{ivar}] = size(X{ivar});
     X{ivar} = zscore(X{ivar}')';
 end
@@ -47,7 +47,8 @@ for ik=2:length(dims)
     directions{ik-1} = fliplr(Vs(inds,end-ncomp+1:end));
     components{ik-1} = fliplr(X{ik-1}' * Vs(inds,end-ncomp+1:end));
 end
-correlations = flipud(diag(c(end-ncomp:end,end-ncomp:end))/length(X));
+%~ correlations = flipud(diag(c(end-ncomp:end,end-ncomp:end))/length(X));
+correlations = flipud(diag(c(end-ncomp+1:end,end-ncomp+1:end))/length(X));
 
 
 function Cstar = autoshrinkage(X)

@@ -7,7 +7,6 @@ if ~exist('idx','var'),
 end
 idx = 1:size(canonical_components{1},1);
 
-
 ncomp = size(canonical_components{1},2);
 pwc = zeros([length(canonical_components),length(canonical_components),ncomp]);
 

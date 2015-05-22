@@ -17,7 +17,7 @@ function sqr_preprocess(config)
 	TR = 3;
 
 	% grey matter threshold
-	grey_threshold = 0.05;
+	grey_threshold = 0.1;
 
 	% bandstops for filter
 	bandstart = .005;
@@ -31,16 +31,19 @@ function sqr_preprocess(config)
 
 	for isubj=1:nsubj
 			fprintf('************************\nSubj %s\n************************\n',subjs(isubj).name)
-			 vols = dir(fullfile(functional_dir, subjs(isubj).name, 'nsynth*.nii'));
+			 %~ vols = dir(fullfile(functional_dir, subjs(isubj).name, 'nsynth*.nii')); % normalized_data
+			vols = dir(fullfile(functional_dir, subjs(isubj).name, 'r_a*.nii')); % felix' data
 			fprintf('\tFound %4d volumes\n',length(vols))
 			
-			tmp = dir(fullfile(structural_dir, subjs(isubj).name, 'wrp1co*.nii'));
+			%~ tmp = dir(fullfile(structural_dir, subjs(isubj).name, 'wrp1co*.nii')); % for normalized data
+			tmp = dir(fullfile(structural_dir, subjs(isubj).name, 'c1co*.nii')); % for felix' data
 	   
 			fprintf('\tReslicing segmentation file %s\n',tmp(1).name)
 			segfile = fullfile(structural_dir, subjs(isubj).name, tmp(1).name);
 			
 			spm_reslice({fullfile(functional_dir,subjs(isubj).name,vols(1).name),segfile});
-			segfile = regexprep(segfile, 'wrp1co', 'rwrp1co');
+			%~ segfile = regexprep(segfile, 'wrp1co', 'rwrp1co'); % used for normalized data
+			segfile = regexprep(segfile, 'c1co','rc1co'); % used for felix' data
 			gmask = spm_read_vols(spm_vol(segfile)) > grey_threshold;
 			fprintf('\tReading Volumes of Subject %2d\n\t|',isubj)
 	  

@@ -11,12 +11,15 @@ function config = preprocessing_config()
 		config.pattern_string = 'nsynth*.nii';
 		% config.pattern_string = 'r_a*.nii';
 	else
-		config.functional_dir = '/home/achim/Data/dummy_sequrea/functional';
-		config.structural_dir = '/home/achim/Data/dummy_sequrea/structural';
-		config.logfile_dir = '/home/achim/Data/sequrea/ORIGINAL/logfiles';
+		config.functional_dir = '/home/achim/Data/dummy_sequrea/functional_unaligned';
+		config.structural_dir = '/home/achim/Data/dummy_sequrea/structural_unaligned';
+		config.logfile_dir = '/home/achim/Data/dummy_sequrea/logfiles';
 		
 		config.nsynth_ref_file = '/home/achim/Data/dummy_sequrea/abilities_pFgA.nii';
 
-		config.preprocessing_output_dir = '/home/achim/Data/dummy_sequrea/preprocessed_data';
+		config.preprocessing_output_dir = '/home/achim/Data/dummy_sequrea/preprocessed_data_unaligned';
+		
+		config.nsynth_nifti_dir = '/home/achim/Data/dummy_sequrea/nsynth-niftis-pFgA';
+		config.nsynth_pattern_dir = '/home/achim/Data/dummy_sequrea/nsynth-pattern-pFgA';
 	end
 end

@@ -1,4 +1,7 @@
-function fix_movie_visualise_fold_patterns(subject_data, patterns, output_dir, exp_name, num_factors)
+function pattern_visualisation(subject_data, patterns, output_path,num_factors)
+	if nargin < 3
+		num_factors = 3;
+	end
 	for ifact = 1:num_factors
 		image_container = {};
 		for isubj = 1:length(patterns)
@@ -20,9 +23,11 @@ function fix_movie_visualise_fold_patterns(subject_data, patterns, output_dir, e
 			image_container{row_idx, col_idx} = flat_image(vol);
 		end
 		% plot and save
-		save_path = fullfile(output_dir, [exp_name, 'f', num2str(ifact)]);
+		%~ save_path = fullfile(output_dir, [exp_name, 'f', num2str(ifact)]);
+		save_path = fullfile([output_path, '-fact', num2str(ifact)]);
 		plot_container(image_container, save_path)
 	end
+
 end
 
 function plot_container(container, save_path)
@@ -42,7 +47,8 @@ function plot_container(container, save_path)
 	set(handles(1:end), 'XTick', []);
 	set(handles(1:end), 'YTick', []);
 	
-	print(gcf, [save_path, '.png'], '-dpng', '-r500', '-opengl');
+	%~ print(gcf, [save_path, '.png'], '-dpng', '-r500', '-opengl');
+	print(gcf, [save_path, '.png'], '-dpng', '-r1000', '-opengl');
 end
 
 function image = flat_image(vol)
